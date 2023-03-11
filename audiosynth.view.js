@@ -29,6 +29,7 @@ function AudioSynthView() {
 	};
 
 	// Key bindings, notes to keyCodes.
+	// *** This obviously needs to change, but for now we can keep the keys
 	var keyboard = {
 		
 			/* 2 */
@@ -138,14 +139,20 @@ function AudioSynthView() {
 			188: 'A,1',
 			
 			/* . */
-			190: 'B,1'
-		
+			190: 'B,1',
+
+			// * (numpad)
+			42: 'M1,0', // What's the second number? Looks like boosting by an octave
+
+			// -
+			44: "M2,0",		
 		};
 	
 	var reverseLookupText = {};
 	var reverseLookup = {};
 
 	// Create a reverse lookup table.
+	// *** Likewise
 	for(var i in keyboard) {
 	
 		var val;
@@ -275,7 +282,7 @@ function AudioSynthView() {
 		
 			// space
 			case 16:
-				break;
+				// break; // weird. Was this meant to not be there?
 				fnPlaySong([
 					['E,0', 8],
 					['D,0', 8],

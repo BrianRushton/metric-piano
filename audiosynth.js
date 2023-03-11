@@ -50,7 +50,50 @@ var Synth, AudioSynth, AudioSynthInstrument;
 		return this._volume;
 	});
 	setPub('getVolume', function() { return Math.round(this._volume/32768*10000)/10000; });
-	setPriv('_notes',{'C':261.63,'C#':277.18,'D':293.66,'D#':311.13,'E':329.63,'F':349.23,'F#':369.99,'G':392.00,'G#':415.30,'A':440.00,'A#':466.16,'B':493.88});
+	
+	// *** new magic
+	middleM0 = 260.00
+	function getFrequency(i) {
+		// *** The best way to do this would be to return the whole array, actually
+		// That would be a good interview question (maybe)
+		frequency = middleM0;
+
+		for (i=i; i > 0; --i)
+		{
+			frequency *= Math.pow(2, 0.1)
+		}
+
+		return frequency
+	}
+
+	// *** Looks like this is where it is!
+	// *** Instead of deleting the other one, we should generalize it and let the caller specify how many steps
+	setPriv('_notes',{
+		'C':  getFrequency(0), // 261.63,
+		'C#': getFrequency(1), //277.18,
+		'D':  getFrequency(2), // 293.66,
+		'D#': 0, // 311.13,
+		'E':  0, //329.63,
+		'F':  getFrequency(3), //349.23,
+		'F#': getFrequency(4), //369.99,
+		'G':  getFrequency(5), //392.00,
+		'G#': getFrequency(6), //415.30,
+		'A':  getFrequency(7), //440.00,
+		'A#': getFrequency(8), //466.16,
+		'B':  getFrequency(9), //493.88,
+		// Adding in the metric notes! (dummy ones for now)
+		// Again, it would be swell to calculate them instead of hardcoding
+		// 'M0': getFrequency(0), 
+		// 'M1': getFrequency(1),
+		// "M2": getFrequency(2),
+		// "M3": getFrequency(3),
+		// "M4": getFrequency(4),
+		// "M5": getFrequency(5),
+		// "M6": getFrequency(6),
+		// "M7": getFrequency(7),
+		// "M8": getFrequency(8),
+		// "M9": getFrequency(9),
+	});
 	setPriv('_fileCache',[],true);
 	setPriv('_temp',{},true);
 	setPriv('_sounds',[],true);
@@ -217,6 +260,9 @@ var Synth, AudioSynth, AudioSynthInstrument;
 	Synth = AudioSynthInstance;
 }();
 
+
+// *** This might be part of the calc. But note how there are 10 steps !?!
+// But note the frequency parameter, so maybe that's enough. Maybe the inputs to this are all that need to change.
 Synth.loadModulationFunction(
 	function(i, sampleRate, frequency, x) { return 1 * Math.sin(2 * Math.PI * ((i / sampleRate) * frequency) + x); },
 	function(i, sampleRate, frequency, x) { return 1 * Math.sin(4 * Math.PI * ((i / sampleRate) * frequency) + x); },
