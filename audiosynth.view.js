@@ -7,7 +7,8 @@ function AudioSynthView() {
 	__audioSynth.setVolume(0.5);
 	var __octave = 4;
 	
-	// Change octave
+	// Change octave (actually septave)
+	// *** BUG: It adds the number to the end when you do this
 	var fnChangeOctave = function(x) {
 
 		x |= 0;
@@ -54,6 +55,8 @@ function AudioSynthView() {
 		num6: 54,
 		num8: 56,
 		num0: 48,
+		minus: 189,
+		equals: 187, 
 
 		Q: 81,
 		W: 87,
@@ -68,9 +71,22 @@ function AudioSynthView() {
 		bracketLeft: 219,
 		bracketRight: 221,
 
+		S: 83,
+		F: 70,
+		G: 71,
+		H: 72,
+
+		Z: 90,
+		X: 88,
+		C: 67,
+		V: 86,
+		B: 66,
+		N: 78,
+
+		space: 32,
 	}
 
-	// Key bindings, notes to keyCodes.
+	// Key bindings, keyCodes to notes
 	const keyboard = {
 	
 			[asciiCode.num2]: getPair('M1', -1),
@@ -82,16 +98,9 @@ function AudioSynthView() {
 			[asciiCode.num8]: getPair('M1', 0),
 
 			[asciiCode.num0]: getPair('M4', 0),
-			
-			/* - ???? */
-			45: getPair('M6', 0),
+			[asciiCode.minus]: getPair('M6', 0),
+			[asciiCode.equals]: getPair('M8', 0),	
 
-			/* +  ??? Why does this work (sort of)*/
-			// 187: getPair('M8', 0), //'F#,0',
-
-			/* = */
-			61: getPair('M8', 0), //'F#,0',
-			
 			[asciiCode.Q]: 'C,-1',
 			[asciiCode.W]: getPair('M2', "-1"),
 			[asciiCode.E]: getPair('M3', "-1"),
@@ -106,66 +115,24 @@ function AudioSynthView() {
 			[asciiCode.bracketLeft]: getPair('M7', "0"),
 			[asciiCode.bracketRight]: getPair('M9', "0"),
 		
-			/* A */
-			65: 'G#,0',
-		
-			/* S */
-			83: 'A#,0',
-			
-			/* F */
-			70: 'C#,1',
-		
-			/* G */
-			71: 'D#,1',
-		
-			/* J */
-			74: 'F#,1',
-		
-			/* K */
-			75: 'G#,1',
-		
-			/* L */
-			76: 'A#,1',
-		
-			/* Z */
-			90: getPair('C', "1"), //'A,0',
-		
-			/* X */
-			88: getPair('M2', "1"), //'B,0',
-		
-			/* C */
-			67: getPair('M3', "1"), //'C,1',
-		
-			/* V */
-			86: getPair('M5', "1"), //'D,1',
-		
-			/* B */
-			66: getPair('M7', "1"), //'E,1',
-		
-			/* N */
-			78: getPair('M9', "1"), //'F,1',
-		
-			/* M */
-			//77: 'G,1',
-			
-			/* , */
-			//188: 'A,1',
-			
-			/* . */
-			//190: 'B,1',
+			[asciiCode.S]: getPair('M1', "1"),
 
-			// * (numpad)
-			42: 'M1,0', // What's the second number? Looks like boosting by an octave
-
-			// -		
-			44: "M2,0",		
+			[asciiCode.F]: getPair('M4', "1"),
+			[asciiCode.G]: getPair('M6', "1"),
+			[asciiCode.H]: getPair('M8', "1"),
+		
+			[asciiCode.Z]: getPair('C', "1"),
+			[asciiCode.X]: getPair('M2', "1"),
+			[asciiCode.C]: getPair('M3', "1"),
+			[asciiCode.V]: getPair('M5', "1"),
+			[asciiCode.B]: getPair('M7', "1"),
+			[asciiCode.N]: getPair('M9', "1"),
 		};
 	
 	var reverseLookupText = {};
 	var reverseLookup = {};
 
 	// Create a reverse lookup table.
-	// *** Likewise
 	for(var i in keyboard) {
 	
 		var val;
@@ -236,55 +203,55 @@ function AudioSynthView() {
 
 		var iKeys = 0;
 		var iWhite = 0;
-		// *** This is why we get all the notes shown
-		// Not clear if we can change this - for now we can hack around it.,
+		// *** This is why we need to deal with all of the notes.
+		// We might be able to get around that if we replaced this with a custom list.
 		var notes = __audioSynth._notes; 
 
-		for(var i=-1;i<=1;i++) { // fancy way of saying the three octaves shown
+		for(var i=-1; i<=1; i++) { // fancy way of saying the three octaves/septaves shown
 			for(var n in notes) {
 				if (shouldSkip(n))
 				{
 					continue;
 				}
-				console.log("Creating key: " + n)
-
-				// Oh, and change it so that D and D# are removed instead, so it's easier to handle
-				const notInSomeKindOfBogusCondition = n[2] != 'b'
-				if(notInSomeKindOfBogusCondition) {
-					var thisKey = document.createElement('div');
-					var isBlack = (n.length > 1)
-
-					if(isBlack) {
-						thisKey.className = 'black key';
-						thisKey.style.width = '30px';
-						thisKey.style.height = '120px';
-						thisKey.style.left = (40 * (iWhite - 1)) + 25 + 'px';
-					} else {
-						thisKey.className = 'white key';
-						thisKey.style.width = '40px';
-						thisKey.style.height = '200px';
-						thisKey.style.left = 40 * iWhite + 'px';
-						iWhite++;
-					}
-					var label = document.createElement('div');
-					label.className = 'label';
-					
-					// *** Seems we need to keep the old values in the HTML, so we convert here to display the M values
-					var metricKeyLabel = oldNoteToNew[n]; // substr(0,1);
-
-					// This is just confusing when we have letters as notes
-					var octaveNumberIgnored = '' // (__octave + parseInt(i))
-					var optionalSharpIgnored = '' // (n.substr(1,1)?n.substr(1,1):'');
-
-					label.innerHTML = '<b>' + String.fromCharCode(reverseLookupText[n + ',' + i]) + '</b>' + '<br /><br />' + metricKeyLabel +
-						'<span name="OCTAVE_LABEL" value="' + i + '">' + octaveNumberIgnored + '</span>' + optionalSharpIgnored;
-					thisKey.appendChild(label);
-					thisKey.setAttribute('ID', 'KEY_' + n + ',' + i);
-					thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[n + ',' + i]));
-					visualKeyboard[n + ',' + i] = thisKey;
-					visualKeyboard.appendChild(thisKey); // *** This is where we actually stick it on
-					iKeys++; // *** What is this for?
+				
+				if (n[2] == 'b')
+				{
+					// From the original code, we're in some kind of bogus condition, so bail out
+					continue;
 				}
+				
+				var thisKey = document.createElement('div');
+				var isBlack = (n.length > 1)
+
+				if(isBlack) {
+					thisKey.className = 'black key';
+					thisKey.style.width = '30px';
+					thisKey.style.height = '120px';
+					thisKey.style.left = (40 * (iWhite - 1)) + 25 + 'px';
+				} else {
+					thisKey.className = 'white key';
+					thisKey.style.width = '40px';
+					thisKey.style.height = '200px';
+					thisKey.style.left = 40 * iWhite + 'px';
+					iWhite++;
+				}
+				var label = document.createElement('div');
+				label.className = 'label';
+				
+				var metricKeyLabel = oldNoteToNew[n];
+
+				// This is just confusing when we have letters as notes
+				var octaveNumberIgnored = '' // (__octave + parseInt(i))
+				var optionalSharpIgnored = '' // (n.substr(1,1)?n.substr(1,1):'');
+
+				label.innerHTML = '<b>' + String.fromCharCode(reverseLookupText[n + ',' + i]) + '</b>' + '<br /><br />' + metricKeyLabel +
+					'<span name="OCTAVE_LABEL" value="' + i + '">' + octaveNumberIgnored + '</span>' + optionalSharpIgnored;
+				thisKey.appendChild(label);
+				thisKey.setAttribute('ID', 'KEY_' + n + ',' + i);
+				thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[n + ',' + i]));
+				visualKeyboard[n + ',' + i] = thisKey;
+				visualKeyboard.appendChild(thisKey); // *** This is where we actually stick it on
+				iKeys++; // *** What is this for?
 			}
 		}
 
@@ -312,7 +279,7 @@ function AudioSynthView() {
 	// Detect keypresses, play notes.
 
 	var fnPlayKeyboard = function(e) {
-	
+		console.log("key code: " + e.keyCode)
 		var i = keysPressed.length;
 		while(i--) {
 			if(keysPressed[i]==e.keyCode) {
@@ -335,7 +302,8 @@ function AudioSynthView() {
 		
 			// space
 			case 16:
-				// break; // weird. Was this meant to not be there?
+				break; // weird. Was this meant to not be there? 
+				// It doesn't happen on space though if you uncomment this
 				fnPlaySong([
 					['E,0', 8],
 					['D,0', 8],
