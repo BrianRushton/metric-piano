@@ -8,7 +8,6 @@ function AudioSynthView() {
 	var __octave = 4;
 	
 	// Change octave (actually septave)
-	// *** BUG: It adds the number to the end when you do this
 	var fnChangeOctave = function(x) {
 
 		x |= 0;
@@ -21,7 +20,7 @@ function AudioSynthView() {
 		var i = octaveName.length;
 		while(i--) {
 			var val = parseInt(octaveName[i].getAttribute('value'));
-			octaveName[i].innerHTML = (val + __octave);
+			octaveName[i].innerHTML = val; // Omitting the octave, since it's confusing with the M number:  (val + __octave);
 		}
 	
 		document.getElementById('OCTAVE_LOWER').innerHTML = __octave-1;
@@ -47,8 +46,8 @@ function AudioSynthView() {
 		return metricToNormal[metricId] + ',' + septaveId
 	}
 
-	// *** TODO: Move all these tables to a separate file
-	const asciiCode = {
+	const keyboardCode = {
+		// These mostly match the ASCII values, but not always
 		num2: 50,
 		num4: 52,
 		num5: 53,
@@ -89,44 +88,44 @@ function AudioSynthView() {
 	// Key bindings, keyCodes to notes
 	const keyboard = {
 	
-			[asciiCode.num2]: getPair('M1', -1),
+			[keyboardCode.num2]: getPair('M1', -1),
 
-			[asciiCode.num4]: getPair('M4', -1),
-			[asciiCode.num5]: getPair('M6', -1),
-			[asciiCode.num6]: getPair('M8', -1),
+			[keyboardCode.num4]: getPair('M4', -1),
+			[keyboardCode.num5]: getPair('M6', -1),
+			[keyboardCode.num6]: getPair('M8', -1),
 
-			[asciiCode.num8]: getPair('M1', 0),
+			[keyboardCode.num8]: getPair('M1', 0),
 
-			[asciiCode.num0]: getPair('M4', 0),
-			[asciiCode.minus]: getPair('M6', 0),
-			[asciiCode.equals]: getPair('M8', 0),	
+			[keyboardCode.num0]: getPair('M4', 0),
+			[keyboardCode.minus]: getPair('M6', 0),
+			[keyboardCode.equals]: getPair('M8', 0),	
 
-			[asciiCode.Q]: 'C,-1',
-			[asciiCode.W]: getPair('M2', "-1"),
-			[asciiCode.E]: getPair('M3', "-1"),
-			[asciiCode.R]: getPair('M5', "-1"),
-			[asciiCode.T]: getPair('M7', "-1"),
-			[asciiCode.Y]: getPair('M9', "-1"),
+			[keyboardCode.Q]: 'C,-1',
+			[keyboardCode.W]: getPair('M2', "-1"),
+			[keyboardCode.E]: getPair('M3', "-1"),
+			[keyboardCode.R]: getPair('M5', "-1"),
+			[keyboardCode.T]: getPair('M7', "-1"),
+			[keyboardCode.Y]: getPair('M9', "-1"),
 			
-			[asciiCode.U]: getPair('C', "0"),
-			[asciiCode.I]: getPair('M2', "0"),
-			[asciiCode.O]: getPair('M3', "0"),
-			[asciiCode.P]: getPair('M5', "0"),
-			[asciiCode.bracketLeft]: getPair('M7', "0"),
-			[asciiCode.bracketRight]: getPair('M9', "0"),
+			[keyboardCode.U]: getPair('C', "0"),
+			[keyboardCode.I]: getPair('M2', "0"),
+			[keyboardCode.O]: getPair('M3', "0"),
+			[keyboardCode.P]: getPair('M5', "0"),
+			[keyboardCode.bracketLeft]: getPair('M7', "0"),
+			[keyboardCode.bracketRight]: getPair('M9', "0"),
 		
-			[asciiCode.S]: getPair('M1', "1"),
+			[keyboardCode.S]: getPair('M1', "1"),
 
-			[asciiCode.F]: getPair('M4', "1"),
-			[asciiCode.G]: getPair('M6', "1"),
-			[asciiCode.H]: getPair('M8', "1"),
+			[keyboardCode.F]: getPair('M4', "1"),
+			[keyboardCode.G]: getPair('M6', "1"),
+			[keyboardCode.H]: getPair('M8', "1"),
 		
-			[asciiCode.Z]: getPair('C', "1"),
-			[asciiCode.X]: getPair('M2', "1"),
-			[asciiCode.C]: getPair('M3', "1"),
-			[asciiCode.V]: getPair('M5', "1"),
-			[asciiCode.B]: getPair('M7', "1"),
-			[asciiCode.N]: getPair('M9', "1"),
+			[keyboardCode.Z]: getPair('C', "1"),
+			[keyboardCode.X]: getPair('M2', "1"),
+			[keyboardCode.C]: getPair('M3', "1"),
+			[keyboardCode.V]: getPair('M5', "1"),
+			[keyboardCode.B]: getPair('M7', "1"),
+			[keyboardCode.N]: getPair('M9', "1"),
 		};
 	
 	var reverseLookupText = {};
@@ -138,36 +137,38 @@ function AudioSynthView() {
 		var val;
 
 		switch(i|0) {
-		
-			case 187:
+			// We need to special case the keys whose key codes don't match the ASCII
+			case keyboardCode.equals:
 				val = 61;
 				break;
+
+			case keyboardCode.minus:
+				val = 45;
+				break;
 			
-			case 219:
+			case keyboardCode.bracketLeft:
 				val = 91;
 				break;
 			
-			case 221:
+			case keyboardCode.bracketRight:
 				val = 93;
 				break;
 			
-			case 188:
-				val = 44;
-				break;
+			// case 188: // comma, currently unused
+			// 	val = 44;
+			// 	break;
 			
-			case 190:
-				val = 46;
-				break;
+			// case 190: // period, currently unused
+			// 	val = 46;
+			// 	break;
 			
 			default:
 				val = i;
-				break;
-			
+				break;			
 		}
 	
 		reverseLookupText[keyboard[i]] = val;
 		reverseLookup[keyboard[i]] = i;
-	
 	}
 
 	// Keys you have pressed down.
@@ -250,7 +251,7 @@ function AudioSynthView() {
 				thisKey.setAttribute('ID', 'KEY_' + n + ',' + i);
 				thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[n + ',' + i]));
 				visualKeyboard[n + ',' + i] = thisKey;
-				visualKeyboard.appendChild(thisKey); // *** This is where we actually stick it on
+				visualKeyboard.appendChild(thisKey);
 				iKeys++; // *** What is this for?
 			}
 		}
@@ -277,7 +278,6 @@ function AudioSynthView() {
 	};
 
 	// Detect keypresses, play notes.
-
 	var fnPlayKeyboard = function(e) {
 		console.log("key code: " + e.keyCode)
 		var i = keysPressed.length;
