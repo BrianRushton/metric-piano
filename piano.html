@@ -59,7 +59,7 @@
     
     <script async="" src="//www.google-analytics.com/analytics.js"></script><script src="audiosynth.js"></script>
     <script src="audiosynth.view.js"></script>
-    
+    <link rel="icon" href="/MetricPiano.png" type="image/x-icon"> <!-- Looks like we need a real .ico file -->
     </head>
     
     <body>
@@ -74,150 +74,9 @@
         <option value="3">EDM, bro!</option>
     </select>
     
-    <!-- This corresponds to is the actual keyboard, but removing things doesn't break it :| 
-    Obviously it would be great if we could create this programmatically inatead of hardcoding the whole structure
-    -->
     <div id="keyboard" class="keyboard-holder" style="width: 840px;">
-        <div class="white key" d="KEY_C,-1" style="width: 40px; height: 200px; left: 0px;">
-            <div class="label"><b>Q</b><br><br>C
-                <span name="OCTAVE_LABEL" value="-1">3</span></div></div>
-        
-        <!-- Is "M1" here the key to that thing? I thought it was the literal label but it seems not -->
-        <div class="black key" id="KEY_M1,-1" style="width: 30px; height: 120px; left: 25px;">
-            <div class="label"><b>2</b><br><br>M1
-                <span name="OCTAVE_LABEL" value="-1">3</span></div></div>
-        
-        <div class="white key" id="KEY_M1,-1" style="width: 40px; height: 200px; left: 40px;">
-            <div class="label"><b>W</b><br><br>M2
-                <span name="OCTAVE_LABEL" value="-1">3</span></div></div>
-                       
-        <div class="white key" id="KEY_M3,-1" style="width: 40px; height: 200px; left: 120px;">
-            <div class="label"><b>R</b><br><br>M3
-                <span name="OCTAVE_LABEL" value="-1">3</span></div></div>
-        
-        <div class="black key" id="KEY_M4,-1" style="width: 30px; height: 120px; left: 145px;">
-            <div class="label"><b>5</b><br><br>M4
-                <span name="OCTAVE_LABEL" value="-1">3</span></div></div>
-               
-        <div class="white key" id="KEY_M5,-1" style="width: 40px; height: 200px; left: 160px;">
-            <div class="label"><b>T</b><br><br>M5
-                <span name="OCTAVE_LABEL" value="-1">3</span></div></div>
-
-        <div class="black key" id="KEY_M6,-1" style="width: 30px; height: 120px; left: 185px;">
-            <div class="label"><b>6</b><br><br>M6
-                <span name="OCTAVE_LABEL" value="-1">3</span></div></div>
-        
-        <div class="white key" id="KEY_M7,-1" style="width: 40px; height: 200px; left: 200px;">
-            <div class="label"><b>Y</b><br><br>M7
-                <span name="OCTAVE_LABEL" value="-1">3</span></div></div>
-        
-        <div class="black key" id="KEY_M8,-1" style="width: 30px; height: 120px; left: 225px;">
-            <div class="label"><b>7</b><br><br>M8
-                <span name="OCTAVE_LABEL" value="-1">3</span></div></div>
-        
-        <div class="white key" id="KEY_M9,-1" style="width: 40px; height: 200px; left: 240px;">
-            <div class="label"><b>U</b><br><br>M9
-                <span name="OCTAVE_LABEL" value="-1">3</span></div></div>
-
-        <!-- Second septive -->
-       
-        <!-- <div class="white key" id="KEY_C,0" style="width: 40px; height: 200px; left: 280px;">
-            <div class="label"><b>I</b><br><br>C
-                <span name="OCTAVE_LABEL" value="0">4</span></div></div>
-        
-        <div class="black key" id="KEY_M1,0" style="width: 30px; height: 120px; left: 305px;">
-            <div class="label"><b>9</b><br><br>M1
-                <span name="OCTAVE_LABEL" value="0">4</span></div></div>
-
-        <div class="white key" id="KEY_M1,0" style="width: 40px; height: 200px; left: 320px;">
-            <div class="label"><b>O</b><br><br>D
-                <span name="OCTAVE_LABEL" value="0">4</span></div></div>
-
-        <div class="white key" id="KEY_M3,0" style="width: 40px; height: 200px; left: 400px;">
-            <div class="label"><b>[</b><br><br>F
-                <span name="OCTAVE_LABEL" value="0">4</span></div></div>
-        
-        <div class="black key" id="KEY_M4,0" style="width: 30px; height: 120px; left: 425px;">
-            <div class="label"><b>=</b><br><br>F
-                <span name="OCTAVE_LABEL" value="0">4</span></div></div>
-        
-        <div class="white key" id="KEY_M5,0" style="width: 40px; height: 200px; left: 440px;">
-            <div class="label"><b>]</b><br><br>G
-                <span name="OCTAVE_LABEL" value="0">4</span></div></div>
-        
-        <div class="black key" id="KEY_M6,0" style="width: 30px; height: 120px; left: 465px;">
-            <div class="label"><b>A</b><br><br>G
-                <span name="OCTAVE_LABEL" value="0">4</span></div></div>
-        
-        <div class="white key" id="KEY_M7,0" style="width: 40px; height: 200px; left: 480px;">
-            <div class="label"><b>Z</b><br><br>A
-                <span name="OCTAVE_LABEL" value="0">4</span></div></div>
-        
-        <div class="black key" id="KEY_M8,0" style="width: 30px; height: 120px; left: 505px;">
-            <div class="label"><b>S</b><br><br>A
-                <span name="OCTAVE_LABEL" value="0">4</span></div></div>
-        
-        <div class="white key" id="KEY_M9,0" style="width: 40px; height: 200px; left: 520px;">
-            <div class="label"><b>X</b><br><br>B
-                <span name="OCTAVE_LABEL" value="0">4</span></div></div> -->
-        
-        <!-- Third septive -->
-        
-        <!-- <div class="white key" id="KEY_C,1" style="width: 40px; height: 200px; left: 560px;">
-            <div class="label"><b>C</b><br><br>C
-                <span name="OCTAVE_LABEL" value="1">5</span></div></div>
-        
-        <div class="black key" id="KEY_M1,1" style="width: 30px; height: 120px; left: 585px;">
-            <div class="label"><b>F</b><br><br>C
-                <span name="OCTAVE_LABEL" value="1">5</span></div></div>
-        
-        <div class="white key" id="KEY_M1,1" style="width: 40px; height: 200px; left: 600px;">
-            <div class="label"><b>V</b><br><br>D
-                <span name="OCTAVE_LABEL" value="1">5</span></div></div>
-
-        <div class="white key" id="KEY_M3,1" style="width: 40px; height: 200px; left: 680px;">
-            <div class="label"><b>N</b><br><br>F
-                <span name="OCTAVE_LABEL" value="1">5</span></div></div>
-        
-        <div class="black key" id="KEY_M4,1" style="width: 30px; height: 120px; left: 705px;">
-            <div class="label"><b>J</b><br><br>F
-                <span name="OCTAVE_LABEL" value="1">5</span></div></div>
-
-        <div class="white key" id="KEY_M5,1" style="width: 40px; height: 200px; left: 720px;">
-            <div class="label"><b>M</b><br><br>G
-                <span name="OCTAVE_LABEL" value="1">5</span></div></div>
-        
-        <div class="black key" id="KEY_M6,1" style="width: 30px; height: 120px; left: 745px;">
-            <div class="label"><b>K</b><br><br>M6
-                <span name="OCTAVE_LABEL" value="1">5</span></div></div>
-
-        <div class="white key" id="KEY_M7,1" style="width: 40px; height: 200px; left: 760px;">
-            <div class="label"><b>,</b><br><br>A
-                <span name="OCTAVE_LABEL" value="1">5</span></div></div>
-        
-        <div class="black key" id="KEY_M8,1" style="width: 30px; height: 120px; left: 785px;">
-            <div class="label"><b>L</b><br><br>A
-                <span name="OCTAVE_LABEL" value="1">5</span></div></div>
-
-        <div class="white key" id="KEY_M9,1" style="width: 40px; height: 200px; left: 800px;">
-            <div class="label"><b>.</b><br><br>B
-                <span name="OCTAVE_LABEL" value="1">5</span></div></div></div> -->
-    
-        <!-- ------------------------------------------------------------------------------------------- -->
-    
-
-<!-- Can we make our own dummy key? We need to understand better what these vaues mean - duplicating doesn't work -->
-<!-- Maybe it makes more sense to tweak one of the existing ones. -->
-<!-- <div id="keyboard" class="keyboard-holder" style="width: 840px;">
-    <div class="white key" d="KEY_M1,-1" style="width: 40px; height: 80px; left: 0px;">
-        <div class="label"><b>*</b><br><br>M1
-            <span name="OCTAVE_LABEL" value="-1">3</span></div></div>
-
-<div id="keyboard" class="keyboard-holder" style="width: 840px;">
-    <div class="white key" d="KEY_M1,0" style="width: 40px; height: 80px; left: 50px;">
-        <div class="label"><b>-</b><br><br>M2
-            <span name="OCTAVE_LABEL" value="0">3</span></div></div> -->
-<!-- -->
+        <!-- This gets loaded in code (fnCreateKeyboard). The stuff that was here was messing with the metric-ness. -->    
+    </div>
 
     <div class="keyboard-options">
     Range [C<span id="OCTAVE_LOWER">3</span>-B<span id="OCTAVE_UPPER">5</span>]
@@ -239,7 +98,7 @@
     <div class="about">
         <div class="header">Disclaimer</div>
         <div class="contents">
-        Except for the metrification, all code here, including the UI, is © 2013 <a href="https://keithwhor.com/">Keith William Horwood</a> with use of modified scripting from <a href="http://www.sk89q.com/playground/jswav/">Dynamic .WAV generation</a>.
+        Except for the metrification and some refactoring, all code here, including the UI, is © 2013 <a href="https://keithwhor.com/">Keith William Horwood</a> with use of modified scripting from <a href="http://www.sk89q.com/playground/jswav/">Dynamic .WAV generation</a>.
         </div>
     </div>
     
