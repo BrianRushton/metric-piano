@@ -68,6 +68,7 @@ var Synth, AudioSynth, AudioSynthInstrument;
 
 	// *** Looks like this is where it is!
 	// *** Instead of deleting the other one, we should generalize it and let the caller specify how many steps
+	// Removing things breaks stuff. So these values here are the keys in the _notes map
 	setPriv('_notes',{
 		'C':  getFrequency(0), // 261.63,
 		'C#': getFrequency(1), //277.18,
@@ -108,6 +109,7 @@ var Synth, AudioSynth, AudioSynthInstrument;
 				for(var k in this._notes) {
 					noteList[k] = {};
 				} 
+				// *** This might be a spot to modify the text on the key
 				octaveList.push(noteList);
 			}
 			f.push(octaveList);

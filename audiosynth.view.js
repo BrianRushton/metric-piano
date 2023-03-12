@@ -195,6 +195,27 @@ function AudioSynthView() {
 	var visualKeyboard = null;
 	var selectSound = null;
 
+	function shouldSkip(noteName) {
+		// *** Should be D and D# - but why do things not cycle correctly?
+		// Need to find the math that controls the Y position of the black keys.
+		return noteName == "D#" || noteName == "E"
+	}
+
+	var oldNoteToNew = {
+		'C': 'C',
+		'C#': 'M1',
+		'D': 'M2',
+		'D#': 'unused',
+		'E': 'unused',
+		'F': 'M3',
+		'F#': 'M4',
+		'G': 'M5',
+		'G#': 'M6',
+		'A': 'M7',
+		'A#': 'M8',
+		'B': 'M9',
+	}
+
 	var fnCreateKeyboard = function(keyboardElement) {
 		// Generate keyboard
 		// This is our main keyboard element! It's populated dynamically based on what you've set above.
@@ -203,13 +224,25 @@ function AudioSynthView() {
 
 		var iKeys = 0;
 		var iWhite = 0;
-		var notes = __audioSynth._notes;
+		// *** This is why we get all the notes shown
+		// Not clear if we can change this - for now we can hack around it.,
+		var notes = __audioSynth._notes; 
 
-		for(var i=-1;i<=1;i++) {
+		for(var i=-1;i<=1;i++) { // fancy way of saying the three octaves shown
 			for(var n in notes) {
+				// *** TODO: Debug here, so we can skip the necessary notes
+				if (shouldSkip(n))
+				{
+					continue;
+				}
+				console.log("Creating key: " + n)
+
+				// Oh, and change it so that D and D# are removed instead, so it's easier to handle
 				if(n[2]!='b') {
 					var thisKey = document.createElement('div');
-					if(n.length>1) {
+					var isBlack = (n.length > 1)
+
+					if(isBlack) {
 						thisKey.className = 'black key';
 						thisKey.style.width = '30px';
 						thisKey.style.height = '120px';
@@ -223,14 +256,22 @@ function AudioSynthView() {
 					}
 					var label = document.createElement('div');
 					label.className = 'label';
-					label.innerHTML = '<b>' + String.fromCharCode(reverseLookupText[n + ',' + i]) + '</b>' + '<br /><br />' + n.substr(0,1) +
-						'<span name="OCTAVE_LABEL" value="' + i + '">' + (__octave + parseInt(i)) + '</span>' + (n.substr(1,1)?n.substr(1,1):'');
+					
+					// *** Seems we need to keep the old values in the HTML, so we convert here to display the M values
+					var metricKeyLabel = oldNoteToNew[n]; // substr(0,1);
+
+					// This is just confusing when we have letters as notes
+					var octaveNumberIgnored = '' // (__octave + parseInt(i))
+					var optionalSharpIgnored = '' // (n.substr(1,1)?n.substr(1,1):'');
+
+					label.innerHTML = '<b>' + String.fromCharCode(reverseLookupText[n + ',' + i]) + '</b>' + '<br /><br />' + metricKeyLabel +
+						'<span name="OCTAVE_LABEL" value="' + i + '">' + octaveNumberIgnored + '</span>' + optionalSharpIgnored;
 					thisKey.appendChild(label);
 					thisKey.setAttribute('ID', 'KEY_' + n + ',' + i);
 					thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[n + ',' + i]));
 					visualKeyboard[n + ',' + i] = thisKey;
-					visualKeyboard.appendChild(thisKey);
-					iKeys++;
+					visualKeyboard.appendChild(thisKey); // *** This is where we actually stick it on
+					iKeys++; // *** What is this for?
 				}
 			}
 		}
