@@ -52,49 +52,62 @@ var Synth, AudioSynth, AudioSynthInstrument;
 	setPub('getVolume', function() { return Math.round(this._volume/32768*10000)/10000; });
 	
 	// *** new magic
-	middleM0 = 260.00
-	function getFrequency(i) {
-		// *** The best way to do this would be to return the whole array, actually
-		// That would be a good interview question (maybe)
-		frequency = middleM0;
+	function getFrequencies() {
+		const middleM0Freqency = 260.00	
+		const factor = Math.pow(2, 0.1);
 
-		for (i=i; i > 0; --i)
+		// We need to reference the keys by their original names.
+		// The unused ones need to be present too, for compatibility
+		const metricNoteKeys = ['C', 'C#', 'D', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B' ]
+		var frequencies = {
+			'C': middleM0Freqency,
+			'D#': 0,
+			'E': 0,
+		};	
+
+		for (i=1; i < 10; ++i)
 		{
-			frequency *= Math.pow(2, 0.1)
+			note = metricNoteKeys[i]
+			previousNote = metricNoteKeys[i-1]; // could cache, but that seems less clear
+			previousFrequency = frequencies[previousNote]
+			frequencies[note] = previousFrequency * factor
+
+			console.log(note + ': ' + frequencies[note])
+			console.log('   this/C = ' + frequencies[note] / middleM0Freqency)
 		}
 
-		return frequency
+		return frequencies;
 	}
+
+/*
+These are the ratios:
+	C#: 278.66110025943624
+		this/C = 1.0717734625362931
+	D: 298.66157229922914
+	    this/C = 1.148698354997035
+	F: 320.09754746967826
+	   this/C = 1.2311444133449163
+	F#: 343.0720568009525
+	   this/C = 1.3195079107728942
+	G: 367.6955262170047
+		this/C = 1.4142135623730951
+	G#: 394.0863072927035
+	   this/C = 1.5157165665103982
+	A: 422.37124610524245
+	   this/C = 1.624504792712471
+	A#: 452.6862929139845
+	    this/C = 1.7411011265922482
+	B: 485.1771555991398
+	   this/C = 1.8660659830736146
+*/
+
 
 	// *** Looks like this is where it is!
 	// *** Instead of deleting the other one, we should generalize it and let the caller specify how many steps
 	// Removing things breaks stuff. So these values here are the keys in the _notes map
-	setPriv('_notes',{
-		'C':  getFrequency(0), // 261.63,
-		'C#': getFrequency(1), //277.18,
-		'D':  getFrequency(2), // 293.66,
-		'D#': 0, // 311.13,
-		'E':  0, //329.63,
-		'F':  getFrequency(3), //349.23,
-		'F#': getFrequency(4), //369.99,
-		'G':  getFrequency(5), //392.00,
-		'G#': getFrequency(6), //415.30,
-		'A':  getFrequency(7), //440.00,
-		'A#': getFrequency(8), //466.16,
-		'B':  getFrequency(9), //493.88,
-		// Adding in the metric notes! (dummy ones for now)
-		// Again, it would be swell to calculate them instead of hardcoding
-		// 'M0': getFrequency(0), 
-		// 'M1': getFrequency(1),
-		// "M2": getFrequency(2),
-		// "M3": getFrequency(3),
-		// "M4": getFrequency(4),
-		// "M5": getFrequency(5),
-		// "M6": getFrequency(6),
-		// "M7": getFrequency(7),
-		// "M8": getFrequency(8),
-		// "M9": getFrequency(9),
-	});
+	// The _notes map has the original values, so we need entries for those. 
+	setPriv('_notes', getFrequencies());
+
 	setPriv('_fileCache',[],true);
 	setPriv('_temp',{},true);
 	setPriv('_sounds',[],true);
