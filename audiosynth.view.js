@@ -1,6 +1,6 @@
 function AudioSynthView() {
 
-	var isMobile = !!navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i);
+	const isMobile = !!navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i);
 	if(isMobile) { var evtListener = ['touchstart', 'touchend']; } else { var evtListener = ['mousedown', 'mouseup']; }
 
 	var __audioSynth = new AudioSynth();
@@ -46,37 +46,42 @@ function AudioSynthView() {
 		return metricToNormal[metricId] + ',' + septaveId
 	}
 
+	// *** TODO: Move all these tables to a separate file
+	const asciiCode = {
+		num2: 50,
+		num4: 52,
+		num5: 53,
+		num6: 54,
+		num8: 56,
+		num0: 48,
+
+		Q: 81,
+		W: 87,
+		E: 69,
+		R: 82,
+		T: 84,
+		Y: 89,
+		U: 85,
+		I: 73,
+		O: 79,
+		P: 80,
+		bracketLeft: 219,
+		bracketRight: 221,
+
+	}
+
 	// Key bindings, notes to keyCodes.
-	// *** This obviously needs to change, but for now we can keep the keys
-	var keyboard = {
-		
-			/* 2 */
-			50: getPair('M1', -1), //'C#,-1',
-			
-			/* 3 */
-			// 51: 'D#,-1',
-			
-			/* 4 */
-			52: getPair('M4', -1),
+	const keyboard = {
+	
+			[asciiCode.num2]: getPair('M1', -1),
 
-			/* 5 */
-			53: getPair('M6', -1), //'F#,-1',
-			
-			/* 6 */
-			54: getPair('M8', -1), //'G#,-1',
-			
-			/* 7 */
-			// 55: 'A#,-1',
-			
-			/* 8 */
-			56: getPair('M1', 0),
+			[asciiCode.num4]: getPair('M4', -1),
+			[asciiCode.num5]: getPair('M6', -1),
+			[asciiCode.num6]: getPair('M8', -1),
 
-			/* 9 */
-			//57: 'C#,0',
-			
-			// *** These aren't labeld right, and the - sign is wrong
-			/* 0 */
-			48: getPair('M4', 0), //'D#,0',
+			[asciiCode.num8]: getPair('M1', 0),
+
+			[asciiCode.num0]: getPair('M4', 0),
 			
 			/* - ???? */
 			45: getPair('M6', 0),
@@ -87,41 +92,19 @@ function AudioSynthView() {
 			/* = */
 			61: getPair('M8', 0), //'F#,0',
 			
-			/* Q */
-			81: 'C,-1',
+			[asciiCode.Q]: 'C,-1',
+			[asciiCode.W]: getPair('M2', "-1"),
+			[asciiCode.E]: getPair('M3', "-1"),
+			[asciiCode.R]: getPair('M5', "-1"),
+			[asciiCode.T]: getPair('M7', "-1"),
+			[asciiCode.Y]: getPair('M9', "-1"),
 			
-			/* W */
-			87: 'D,-1',
-			
-			/* E */
-			69: getPair('M3', "-1"), //'E,-1',
-			
-			/* R */
-			82: getPair('M5', "-1"), //'F,-1',
-			
-			/* T */
-			84: getPair('M7', "-1"), //'G,-1',
-			
-			/* Y */
-			89: getPair('M9', "-1"), //'A,-1',
-			
-			/* U */
-			85: getPair('C', "0"), //'B,-1',
-			
-			/* I */
-			73: getPair('M2', "0"), //'C,0',
-			
-			/* O */
-			79: getPair('M3', "0"), //'D,0',
-			
-			/* P */
-			80: getPair('M5', "0"), //'E,0',
-			
-			/* [ */
-			219: getPair('M7', "0"), //'F,0',
-			
-			/* ] */
-			221: getPair('M9', "0"), //'G,0',
+			[asciiCode.U]: getPair('C', "0"),
+			[asciiCode.I]: getPair('M2', "0"),
+			[asciiCode.O]: getPair('M3', "0"),
+			[asciiCode.P]: getPair('M5', "0"),
+			[asciiCode.bracketLeft]: getPair('M7', "0"),
+			[asciiCode.bracketRight]: getPair('M9', "0"),
 		
 			/* A */
 			65: 'G#,0',
@@ -230,7 +213,7 @@ function AudioSynthView() {
 		return noteName == "D#" || noteName == "E"
 	}
 
-	var oldNoteToNew = {
+	const oldNoteToNew = {
 		'C': 'C',
 		'C#': 'M1',
 		'D': 'M2',
