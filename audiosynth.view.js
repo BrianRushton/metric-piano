@@ -28,34 +28,64 @@ function AudioSynthView() {
 	
 	};
 
+	const metricToNormal = {
+		'C': 'C',
+		'M1': 'C#',
+		'M2': 'D',
+		'M3': 'F',
+		'M4': 'F#',
+		'M5': 'G',
+		'M6': 'G#',
+		'M7': 'A',
+		'M8': 'A#',
+		'M9': 'B',
+	}
+
+	function getPair(metricId, septaveId) {
+		// *** TODO: Can we take it as a number? (to save quotes below)
+		return metricToNormal[metricId] + ',' + septaveId
+	}
+
 	// Key bindings, notes to keyCodes.
 	// *** This obviously needs to change, but for now we can keep the keys
 	var keyboard = {
 		
 			/* 2 */
-			50: 'C#,-1',
+			50: getPair('M1', -1), //'C#,-1',
 			
 			/* 3 */
-			51: 'D#,-1',
+			// 51: 'D#,-1',
 			
+			/* 4 */
+			52: getPair('M4', -1),
+
 			/* 5 */
-			53: 'F#,-1',
+			53: getPair('M6', -1), //'F#,-1',
 			
 			/* 6 */
-			54: 'G#,-1',
+			54: getPair('M8', -1), //'G#,-1',
 			
 			/* 7 */
-			55: 'A#,-1',
+			// 55: 'A#,-1',
 			
+			/* 8 */
+			56: getPair('M1', 0),
+
 			/* 9 */
-			57: 'C#,0',
+			//57: 'C#,0',
 			
+			// *** These aren't labeld right, and the - sign is wrong
 			/* 0 */
-			48: 'D#,0',
+			48: getPair('M4', 0), //'D#,0',
 			
-			/* + */
-			187: 'F#,0',
-			61: 'F#,0',
+			/* - ???? */
+			45: getPair('M6', 0),
+
+			/* +  ??? Why does this work (sort of)*/
+			// 187: getPair('M8', 0), //'F#,0',
+
+			/* = */
+			61: getPair('M8', 0), //'F#,0',
 			
 			/* Q */
 			81: 'C,-1',
@@ -64,34 +94,34 @@ function AudioSynthView() {
 			87: 'D,-1',
 			
 			/* E */
-			69: 'E,-1',
+			69: getPair('M3', "-1"), //'E,-1',
 			
 			/* R */
-			82: 'F,-1',
+			82: getPair('M5', "-1"), //'F,-1',
 			
 			/* T */
-			84: 'G,-1',
+			84: getPair('M7', "-1"), //'G,-1',
 			
 			/* Y */
-			89: 'A,-1',
+			89: getPair('M9', "-1"), //'A,-1',
 			
 			/* U */
-			85: 'B,-1',
+			85: getPair('C', "0"), //'B,-1',
 			
 			/* I */
-			73: 'C,0',
+			73: getPair('M2', "0"), //'C,0',
 			
 			/* O */
-			79: 'D,0',
+			79: getPair('M3', "0"), //'D,0',
 			
 			/* P */
-			80: 'E,0',
+			80: getPair('M5', "0"), //'E,0',
 			
 			/* [ */
-			219: 'F,0',
+			219: getPair('M7', "0"), //'F,0',
 			
 			/* ] */
-			221: 'G,0',
+			221: getPair('M9', "0"), //'G,0',
 		
 			/* A */
 			65: 'G#,0',
@@ -115,36 +145,36 @@ function AudioSynthView() {
 			76: 'A#,1',
 		
 			/* Z */
-			90: 'A,0',
+			90: getPair('C', "1"), //'A,0',
 		
 			/* X */
-			88: 'B,0',
+			88: getPair('M2', "1"), //'B,0',
 		
 			/* C */
-			67: 'C,1',
+			67: getPair('M3', "1"), //'C,1',
 		
 			/* V */
-			86: 'D,1',
+			86: getPair('M5', "1"), //'D,1',
 		
 			/* B */
-			66: 'E,1',
+			66: getPair('M7', "1"), //'E,1',
 		
 			/* N */
-			78: 'F,1',
+			78: getPair('M9', "1"), //'F,1',
 		
 			/* M */
-			77: 'G,1',
+			//77: 'G,1',
 			
 			/* , */
-			188: 'A,1',
+			//188: 'A,1',
 			
 			/* . */
-			190: 'B,1',
+			//190: 'B,1',
 
 			// * (numpad)
 			42: 'M1,0', // What's the second number? Looks like boosting by an octave
 
-			// -
+			// -		
 			44: "M2,0",		
 		};
 	
@@ -197,7 +227,6 @@ function AudioSynthView() {
 
 	function shouldSkip(noteName) {
 		// *** Should be D and D# - but why do things not cycle correctly?
-		// Need to find the math that controls the Y position of the black keys.
 		return noteName == "D#" || noteName == "E"
 	}
 
@@ -230,7 +259,6 @@ function AudioSynthView() {
 
 		for(var i=-1;i<=1;i++) { // fancy way of saying the three octaves shown
 			for(var n in notes) {
-				// *** TODO: Debug here, so we can skip the necessary notes
 				if (shouldSkip(n))
 				{
 					continue;
@@ -238,7 +266,8 @@ function AudioSynthView() {
 				console.log("Creating key: " + n)
 
 				// Oh, and change it so that D and D# are removed instead, so it's easier to handle
-				if(n[2]!='b') {
+				const notInSomeKindOfBogusCondition = n[2] != 'b'
+				if(notInSomeKindOfBogusCondition) {
 					var thisKey = document.createElement('div');
 					var isBlack = (n.length > 1)
 
