@@ -59,31 +59,32 @@
     
     <script async="" src="//www.google-analytics.com/analytics.js"></script><script src="audiosynth.js"></script>
     <script src="audiosynth.view.js"></script>
-    <link rel="icon" href="/MetricPiano.png" type="image/x-icon"> <!-- Looks like we need a real .ico file -->
+    <link rel="icon" href="/MetricPiano.ico" type="image/x-icon">
     </head>
     
     <body>
     <div class="title">Metric Piano 🎹</div>
     <div class="sub">A weird project by <a href="http://brianrushton.blogspot.com">Brian Rushton</a>
-        <br/>Based on <a href="https://keithwhor.com/music/"></a>Musical Keyboard</a> by <a href="https://keithwhor.com">Keith William Horwood</a> © 2013<br>
+        <br/>Based on <a href="https://keithwhor.com/music/">Musical Keyboard</a> by <a href="https://keithwhor.com">Keith William Horwood</a> © 2013<br/>
+        [<a href="https://github.com/BrianRushton/metric-piano">project on GitHub</a>]
     <div class="keyboard-options">
-    Sound
-    <select id="sound">
-        <option value="0" selected="">Keyboard</option>
-        <option value="1">Organ</option>
-        <option value="2">Acoustic Guitar</option>
-        <option value="3">EDM, bro!</option>
-    </select>
-    
-    <div id="keyboard" class="keyboard-holder" style="width: 840px;">
-        <!-- This gets loaded in code (fnCreateKeyboard). The stuff that was here was messing with the metric-ness. -->    
-    </div>
+        <div id="keyboard" class="keyboard-holder" style="width: 840px;">
+            <!-- This gets loaded in code (fnCreateKeyboard). The stuff that was here was messing with the metric-ness. -->    
+        </div>
+       
+        <div class="keyboard-options">
+            Range [C<span id="OCTAVE_LOWER">3</span>-M9<span id="OCTAVE_UPPER">5</span>]
+            <input type="button" id="-_OCTAVE" value="-">
+            <input type="button" id="+_OCTAVE" value="+"><br>
+            <i>(Use left/right arrows to adjust with keyboard)</i>
+        </div>
 
-    <div class="keyboard-options">
-    Range [C<span id="OCTAVE_LOWER">3</span>-M9<span id="OCTAVE_UPPER">5</span>]
-    <input type="button" id="-_OCTAVE" value="-">
-    <input type="button" id="+_OCTAVE" value="+"><br>
-    <i>(Use left/right arrows to adjust with keyboard)</i>
+        Sound <select id="sound">
+            <option value="0" selected="">Keyboard</option>
+            <option value="1">Organ</option>
+            <option value="2">Acoustic Guitar</option>
+            <option value="3">EDM, bro!</option>
+        </select>
     </div>
 
     <div class="about">
