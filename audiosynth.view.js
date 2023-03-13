@@ -25,7 +25,6 @@ function AudioSynthView() {
 	
 		document.getElementById('OCTAVE_LOWER').innerHTML = __octave-1;
 		document.getElementById('OCTAVE_UPPER').innerHTML = __octave+1;
-	
 	};
 
 	const metricToNormal = {
@@ -242,11 +241,11 @@ function AudioSynthView() {
 				var metricKeyLabel = oldNoteToNew[n];
 
 				// This is just confusing when we have letters as notes
-				var octaveNumberIgnored = '' // (__octave + parseInt(i))
-				var optionalSharpIgnored = '' // (n.substr(1,1)?n.substr(1,1):'');
+				// const octaveNumber = (__octave + parseInt(i))
+				// const optionalSharp = (n.substr(1,1)?n.substr(1,1):'');
+				const octaveLabelIgnored = '' // <span name="OCTAVE_LABEL" value="' + i + '">' + octaveNumber + '</span>' + optionalSharp
 
-				label.innerHTML = '<b>' + String.fromCharCode(reverseLookupText[n + ',' + i]) + '</b>' + '<br /><br />' + metricKeyLabel +
-					'<span name="OCTAVE_LABEL" value="' + i + '">' + octaveNumberIgnored + '</span>' + optionalSharpIgnored;
+				label.innerHTML = '<b>' + String.fromCharCode(reverseLookupText[n + ',' + i]) + '</b>' + '<br /><br />' + metricKeyLabel + octaveLabelIgnored;
 				thisKey.appendChild(label);
 				thisKey.setAttribute('ID', 'KEY_' + n + ',' + i);
 				thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[n + ',' + i]));
