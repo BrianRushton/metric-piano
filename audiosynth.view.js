@@ -42,7 +42,6 @@ function AudioSynthView() {
 	}
 
 	function getPair(metricId, septaveId) {
-		// *** TODO: Can we take it as a number? (to save quotes below)
 		return metricToNormal[metricId] + ',' + septaveId
 	}
 
@@ -100,32 +99,32 @@ function AudioSynthView() {
 			[keyboardCode.minus]: getPair('M6', 0),
 			[keyboardCode.equals]: getPair('M8', 0),	
 
-			[keyboardCode.Q]: 'C,-1',
-			[keyboardCode.W]: getPair('M2', "-1"),
-			[keyboardCode.E]: getPair('M3', "-1"),
-			[keyboardCode.R]: getPair('M5', "-1"),
-			[keyboardCode.T]: getPair('M7', "-1"),
-			[keyboardCode.Y]: getPair('M9', "-1"),
+			[keyboardCode.Q]: getPair('C', -1),
+			[keyboardCode.W]: getPair('M2', -1),
+			[keyboardCode.E]: getPair('M3', -1),
+			[keyboardCode.R]: getPair('M5', -1),
+			[keyboardCode.T]: getPair('M7', -1),
+			[keyboardCode.Y]: getPair('M9', -1),
 			
-			[keyboardCode.U]: getPair('C', "0"),
-			[keyboardCode.I]: getPair('M2', "0"),
-			[keyboardCode.O]: getPair('M3', "0"),
-			[keyboardCode.P]: getPair('M5', "0"),
-			[keyboardCode.bracketLeft]: getPair('M7', "0"),
-			[keyboardCode.bracketRight]: getPair('M9', "0"),
+			[keyboardCode.U]: getPair('C', 0),
+			[keyboardCode.I]: getPair('M2', 0),
+			[keyboardCode.O]: getPair('M3', 0),
+			[keyboardCode.P]: getPair('M5', 0),
+			[keyboardCode.bracketLeft]: getPair('M7', 0),
+			[keyboardCode.bracketRight]: getPair('M9', 0),
 		
-			[keyboardCode.S]: getPair('M1', "1"),
+			[keyboardCode.S]: getPair('M1', 1),
 
-			[keyboardCode.F]: getPair('M4', "1"),
-			[keyboardCode.G]: getPair('M6', "1"),
-			[keyboardCode.H]: getPair('M8', "1"),
+			[keyboardCode.F]: getPair('M4', 1),
+			[keyboardCode.G]: getPair('M6', 1),
+			[keyboardCode.H]: getPair('M8', 1),
 		
-			[keyboardCode.Z]: getPair('C', "1"),
-			[keyboardCode.X]: getPair('M2', "1"),
-			[keyboardCode.C]: getPair('M3', "1"),
-			[keyboardCode.V]: getPair('M5', "1"),
-			[keyboardCode.B]: getPair('M7', "1"),
-			[keyboardCode.N]: getPair('M9', "1"),
+			[keyboardCode.Z]: getPair('C', 1),
+			[keyboardCode.X]: getPair('M2', 1),
+			[keyboardCode.C]: getPair('M3', 1),
+			[keyboardCode.V]: getPair('M5', 1),
+			[keyboardCode.B]: getPair('M7', 1),
+			[keyboardCode.N]: getPair('M9', 1),
 		};
 	
 	var reverseLookupText = {};
