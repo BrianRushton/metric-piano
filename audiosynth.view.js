@@ -16,12 +16,13 @@ function AudioSynthView() {
 	
 		__octave = Math.min(5, Math.max(3, __octave));
 	
-		var octaveName = document.getElementsByName('OCTAVE_LABEL');
-		var i = octaveName.length;
-		while(i--) {
-			var val = parseInt(octaveName[i].getAttribute('value'));
-			octaveName[i].innerHTML = val; // Omitting the octave, since it's confusing with the M number:  (val + __octave);
-		}
+		// Not used, since we're omitting the label
+		// var octaveName = document.getElementsByName('OCTAVE_LABEL');
+		// var i = octaveName.length;
+		// while(i--) {
+		// 	var val = parseInt(octaveName[i].getAttribute('value'));
+		// 	octaveName[i].innerHTML = (val + __octave);
+		// }
 	
 		document.getElementById('OCTAVE_LOWER').innerHTML = __octave-1;
 		document.getElementById('OCTAVE_UPPER').innerHTML = __octave+1;
@@ -176,8 +177,10 @@ function AudioSynthView() {
 	var selectSound = null;
 
 	function shouldSkip(noteName) {
-		// *** Should be D and D# - but why do things not cycle correctly?
-		return noteName == "D#" || noteName == "E"
+		// The original code bailed on this condition, which seems to check for a flat
+		const usesFlatNotation = (noteName[2] == 'b')
+
+		return noteName == "D#" || noteName == "E" || usesFlatNotation
 	}
 
 	const oldNoteToNew = {
@@ -205,23 +208,17 @@ function AudioSynthView() {
 		var iWhite = 0;
 		// *** This is why we need to deal with all of the notes.
 		// We might be able to get around that if we replaced this with a custom list.
-		var notes = __audioSynth._notes; 
+		const notes = __audioSynth._notes; 
 
 		for(var i=-1; i<=1; i++) { // fancy way of saying the three octaves/septaves shown
-			for(var n in notes) {
-				if (shouldSkip(n))
+			for(var noteName in notes) {
+				if (shouldSkip(noteName))
 				{
-					continue;
-				}
-				
-				if (n[2] == 'b')
-				{
-					// From the original code, we're in some kind of bogus condition, so bail out
 					continue;
 				}
 				
 				var thisKey = document.createElement('div');
-				var isBlack = (n.length > 1)
+				const isBlack = (noteName.length > 1)
 
 				if(isBlack) {
 					thisKey.className = 'black key';
@@ -238,18 +235,18 @@ function AudioSynthView() {
 				var label = document.createElement('div');
 				label.className = 'label';
 				
-				var metricKeyLabel = oldNoteToNew[n];
+				const metricKeyLabel = oldNoteToNew[noteName];
 
 				// This is just confusing when we have letters as notes
 				// const octaveNumber = (__octave + parseInt(i))
-				// const optionalSharp = (n.substr(1,1)?n.substr(1,1):'');
+				// const optionalSharp = (noteName.substr(1,1) ? noteName.substr(1,1) : '');
 				const octaveLabelIgnored = '' // <span name="OCTAVE_LABEL" value="' + i + '">' + octaveNumber + '</span>' + optionalSharp
 
-				label.innerHTML = '<b>' + String.fromCharCode(reverseLookupText[n + ',' + i]) + '</b>' + '<br /><br />' + metricKeyLabel + octaveLabelIgnored;
+				label.innerHTML = '<b>' + String.fromCharCode(reverseLookupText[noteName + ',' + i]) + '</b>' + '<br /><br />' + metricKeyLabel + octaveLabelIgnored;
 				thisKey.appendChild(label);
-				thisKey.setAttribute('ID', 'KEY_' + n + ',' + i);
-				thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[n + ',' + i]));
-				visualKeyboard[n + ',' + i] = thisKey;
+				thisKey.setAttribute('ID', 'KEY_' + noteName + ',' + i);
+				thisKey.addEventListener(evtListener[0], (function(_temp) { return function() { fnPlayKeyboard({keyCode:_temp}); } })(reverseLookup[noteName + ',' + i]));
+				visualKeyboard[noteName + ',' + i] = thisKey;
 				visualKeyboard.appendChild(thisKey);
 				iKeys++; // *** What is this for?
 			}
@@ -257,7 +254,7 @@ function AudioSynthView() {
 
 		visualKeyboard.style.width = iWhite * 40 + 'px';
 
-		window.addEventListener(evtListener[1], function() { n = keysPressed.length; while(n--) { fnRemoveKeyBinding({keyCode:keysPressed[n]}); } });
+		window.addEventListener(evtListener[1], function() { noteName = keysPressed.length; while(noteName--) { fnRemoveKeyBinding({keyCode:keysPressed[noteName]}); } });
 	
 	};
 
